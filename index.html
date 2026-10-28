@@ -74,7 +74,7 @@
         {
           "@type": "Question",
           "name": "Are the tools free?",
-          "acceptedAnswer": { "@type": "Answer", "text": "Yes, the tools are free to use. Tools that use AI, like Custom Inquiries and Jarod, ask for your own AI provider key, so any AI usage is billed by that provider directly." }
+          "acceptedAnswer": { "@type": "Answer", "text": "Yes, every tool is free to use. Some features run on AI and use your own API key, so that AI usage is billed to you by the provider directly. Custom Inquiries needs an OpenAI or Anthropic key for its sentiment analysis and recommendations. Eli works without a key, and an optional Anthropic or OpenAI key adds AI extraction for messy documents and an AI-written report. Jarod works without a key, and an optional Anthropic or OpenAI key adds live price refresh and AI review. Focus Radio needs no key." }
         },
         {
           "@type": "Question",
@@ -395,6 +395,9 @@
   .faq summary::after{ content:"+"; color:var(--ink-faint); transition:transform .2s ease; }
   .faq details[open] summary::after{ transform:rotate(45deg); }
   .faq details p{ margin:0; padding:0 28px 18px 0; font-size:14px; }
+  .faq .key-list{ margin:-6px 0 0; padding:0 28px 18px 18px; color:var(--ink-soft); font-size:14px; line-height:1.6; }
+  .faq .key-list li{ margin-bottom:6px; }
+  .faq .key-list strong{ color:var(--ink); }
   @media (max-width:720px){
     .about{ grid-template-columns:1fr; gap:28px; }
   }
@@ -503,7 +506,13 @@
     <div class="faq" id="faq">
       <details open><summary>What is Custom Biz Tools?</summary><p>A set of small, single-purpose web tools for small businesses: Custom Inquiries for customer feedback surveys, Eli for financial statement dashboards, Focus Radio for focus music with a Pomodoro timer, and Jarod for comparing AI model costs. Each tool does one job, with no bundled platform to learn.</p></details>
       <details><summary>Who makes Custom Biz Tools?</summary><p><a href="https://anthonyjctsg.com/">Anthony C Johnson</a>, a data specialist in Sugar Land, Texas, and the founder of <a href="https://ctsg-htx.com/">CTSG</a> (Calamity Technology Solutions Group), which does customer data and follow-up campaigns for Houston home-service companies.</p></details>
-      <details><summary>Are the tools free?</summary><p>Yes, the tools are free to use. Tools that use AI, like Custom Inquiries and Jarod, ask for your own AI provider key, so any AI usage is billed by that provider directly.</p></details>
+      <details><summary>Are the tools free?</summary><p>Yes, every tool is free to use. Some features run on AI and use your own API key, so that AI usage is billed to you by the provider directly:</p>
+        <ul class="key-list">
+          <li><strong>Custom Inquiries</strong> needs an OpenAI or Anthropic key for its sentiment analysis and recommendations.</li>
+          <li><strong>Eli</strong> works without a key. An optional Anthropic or OpenAI key adds AI extraction for messy documents and an AI-written report.</li>
+          <li><strong>Jarod</strong> works without a key. An optional Anthropic or OpenAI key adds live price refresh and AI review.</li>
+          <li><strong>Focus Radio</strong> needs no key.</li>
+        </ul></details>
       <details><summary>How can I turn a P&amp;L or balance sheet into charts?</summary><p>Upload a profit and loss statement, balance sheet or cash flow statement to <a href="https://eli.custombiztools.online">Eli</a>. It builds an interactive dashboard with charts, trends and a revenue-to-net-income bridge.</p></details>
       <details><summary>How do I analyze customer feedback survey responses?</summary><p><a href="https://app.custombiztools.online">Custom Inquiries</a> runs customer feedback surveys and turns the answers into plain-English sentiment analysis and recommendations, using your own AI key.</p></details>
       <details><summary>Is there free focus music with a Pomodoro timer?</summary><p>Yes. <a href="https://radio.custombiztools.online">Focus Radio</a> plays original focus music with a Pomodoro timer and optional rain and fireplace sounds, and lowers the music during breaks.</p></details>
