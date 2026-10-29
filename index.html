@@ -219,9 +219,9 @@
     font-family:'Bricolage Grotesque','Manrope',sans-serif;
     font-weight:800; font-size:19px; letter-spacing:-.02em;
   }
-  .head-right{ margin-left:auto; display:flex; flex-direction:column; align-items:flex-end; gap:8px; }
-  header nav{ display:flex; gap:22px; }
-  header .eyebrow{ font-size:10.5px; padding:5px 11px; }
+  header nav{ margin-left:auto; display:flex; gap:22px; }
+  /* Live counter: just under the header, lined up under the nav links. */
+  .eyebrow.live{ position:absolute; top:75px; right:28px; font-size:10.5px; padding:5px 11px; z-index:2; }
   header nav a{ color:var(--ink-soft); text-decoration:none; font-size:14px; font-weight:600; }
   header nav a:hover{ color:var(--ink); }
 
@@ -229,7 +229,7 @@
   .bento{
     position:relative; z-index:1;
     max-width:1080px; margin:0 auto;
-    padding:40px 28px 80px;
+    padding:56px 28px 80px;
     display:flex; flex-direction:column; gap:20px;
   }
   .box{
@@ -400,8 +400,9 @@
   .faq .key-list strong{ color:var(--ink); }
   @media (max-width:760px){
     header{ padding:12px 16px; }
-    .head-right{ display:none; }
-    .bento{ padding:24px 16px 64px; gap:16px; }
+    header nav{ display:none; }
+    .eyebrow.live{ top:71px; right:16px; }
+    .bento{ padding:52px 16px 64px; gap:16px; }
     .box{ padding:22px; }
     .card{ padding:24px; min-height:0; }
   }
@@ -421,14 +422,14 @@
 
   /* Laptop and up: one screen, no page scroll. Headline top-left, About + FAQ
      below it (scrolls inside its own box), the four tools as a 2x2 grid on the right. */
-  @media (min-width:1024px) and (min-height:620px){
+  @media (min-width:1024px) and (min-height:700px){
     /* body is a column: header on top, the bento takes whatever height is left */
     body{ height:100vh; height:100svh; display:flex; flex-direction:column; }
-    header{ position:relative; flex:none; padding-top:10px; padding-bottom:10px; }
+    header{ position:relative; flex:none; }
     .bento{
       flex:1; min-height:0; width:100%;
       max-width:1480px;
-      padding:14px 24px 20px; gap:16px;
+      padding:48px 24px 20px; gap:16px;
       display:grid;
       grid-template-columns:minmax(360px,.95fr) minmax(0,2fr);
       grid-template-rows:auto minmax(0,1fr);
@@ -462,11 +463,9 @@
 <header>
   <div class="mark" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
   <span class="name">Customizable Business Tools</span>
-  <div class="head-right">
-    <nav><a href="#tools">Tools</a><a href="#about">About</a><a href="#faq">FAQ</a></nav>
-    <span class="eyebrow"><span class="dot"></span>4 free tools &middot; live now</span>
-  </div>
+  <nav><a href="#tools">Tools</a><a href="#about">About</a><a href="#faq">FAQ</a></nav>
 </header>
+<span class="eyebrow live"><span class="dot"></span>4 free tools &middot; live now</span>
 
 <main class="bento">
   <div class="intro">
