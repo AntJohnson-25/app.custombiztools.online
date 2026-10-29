@@ -146,364 +146,405 @@
 }
 </script>
 
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,340;9..144,500&family=Manrope:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Manrope:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
 <style>
   :root{
-    --ground:#0A0B0F;
-    --glass:rgba(255,255,255,0.045);
-    --glass-hover:rgba(255,255,255,0.08);
-    --glass-border:rgba(255,255,255,0.11);
-    --glass-border-hover:rgba(255,255,255,0.24);
-    --ink:#F4F5F8;
-    --ink-soft:#9CA2B0;
-    --ink-faint:#585E6C;
-    --header-bg:rgba(10,11,15,0.72);
+    --ground:#08080C;
+    --panel:#111118;
+    --line:rgba(255,255,255,0.09);
+    --ink:#F6F6FA;
+    --ink-soft:#A3A6B4;
+    --ink-faint:#5E6170;
+    /* One accent per tool. */
+    --pink:#FF4D8D;
+    --blue:#3D8BFF;
+    --orange:#FF9A3D;
+    --green:#2EE59D;
+    --violet:#9B6BFF;
   }
   *{box-sizing:border-box;}
   html,body{margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
   body{
     background:var(--ground);
     color:var(--ink);
     font-family:'Manrope',-apple-system,'Segoe UI',sans-serif;
     min-height:100vh;
-    position:relative;
     overflow-x:hidden;
     -webkit-font-smoothing:antialiased;
   }
 
-  /* One fixed light source every glass surface catches consistently. */
-  .light{
-    position:fixed;
-    top:-32vh;left:-8vw;
-    width:65vw;height:65vw;
-    max-width:820px;max-height:820px;
-    background:radial-gradient(circle, rgba(255,255,255,0.07), rgba(255,255,255,0.02) 45%, transparent 70%);
-    pointer-events:none;
-    z-index:0;
+  /* Colored light behind everything, drifting slowly. */
+  .aurora{ position:fixed; inset:0; z-index:0; pointer-events:none; overflow:hidden; }
+  .aurora span{
+    position:absolute; border-radius:50%; filter:blur(90px); opacity:.30;
+    animation:drift 26s ease-in-out infinite alternate;
   }
-  .light-2{
-    position:fixed;
-    bottom:-25vh;right:-15vw;
-    width:55vw;height:55vw;
-    max-width:700px;max-height:700px;
-    background:radial-gradient(circle, rgba(80,110,160,0.10), transparent 65%);
-    pointer-events:none;
-    z-index:0;
+  .aurora .a1{ width:520px;height:520px; background:var(--pink);   top:-180px; left:-120px; }
+  .aurora .a2{ width:480px;height:480px; background:var(--blue);   top:10%;  right:-160px; animation-delay:-8s; }
+  .aurora .a3{ width:420px;height:420px; background:var(--orange); bottom:-200px; left:20%; animation-delay:-14s; opacity:.18; }
+  .aurora .a4{ width:380px;height:380px; background:var(--green);  bottom:5%; right:10%; animation-delay:-20s; opacity:.14; }
+  @keyframes drift{
+    from{ transform:translate(0,0) scale(1); }
+    to{ transform:translate(60px,40px) scale(1.12); }
+  }
+  .grain{
+    position:fixed; inset:0; z-index:0; pointer-events:none; opacity:.06;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   }
 
   header{
-    position:sticky;
-    top:0;
-    z-index:10;
-    display:flex;
-    align-items:center;
-    gap:12px;
-    padding:16px 28px;
-    background:var(--header-bg);
-    backdrop-filter:blur(20px) saturate(140%);
-    -webkit-backdrop-filter:blur(20px) saturate(140%);
-    border-bottom:1px solid var(--glass-border);
+    position:sticky; top:0; z-index:10;
+    display:flex; align-items:center; gap:12px;
+    padding:14px 28px;
+    background:rgba(8,8,12,0.66);
+    backdrop-filter:blur(18px) saturate(150%);
+    -webkit-backdrop-filter:blur(18px) saturate(150%);
+    border-bottom:1px solid var(--line);
   }
   .mark{
-    flex:none;
-    width:30px;height:30px;
-    border-radius:8px;
-    background:var(--glass);
-    border:1px solid var(--glass-border);
-    display:flex;align-items:center;justify-content:center;
+    flex:none; width:34px;height:34px; border-radius:10px;
+    display:grid; grid-template-columns:1fr 1fr; gap:3px; padding:6px;
+    background:#16161E; border:1px solid var(--line);
   }
-  .mark svg{ width:15px;height:15px; }
+  .mark i{ border-radius:3px; }
+  .mark i:nth-child(1){ background:var(--pink); }
+  .mark i:nth-child(2){ background:var(--blue); }
+  .mark i:nth-child(3){ background:var(--orange); }
+  .mark i:nth-child(4){ background:var(--green); }
   header .name{
-    font-weight:800;
-    font-size:18px;
-    letter-spacing:-.01em;
-    color:var(--ink);
+    font-family:'Bricolage Grotesque','Manrope',sans-serif;
+    font-weight:800; font-size:19px; letter-spacing:-.02em;
   }
+  .head-right{ margin-left:auto; display:flex; flex-direction:column; align-items:flex-end; gap:8px; }
+  header nav{ display:flex; gap:22px; }
+  header .eyebrow{ font-size:10.5px; padding:5px 11px; }
+  header nav a{ color:var(--ink-soft); text-decoration:none; font-size:14px; font-weight:600; }
+  header nav a:hover{ color:var(--ink); }
 
-  .shell{
-    position:relative;
-    z-index:1;
-    max-width:920px;
-    margin:0 auto;
-    padding:64px 28px 120px;
+  /* Bento: phones stack the boxes; laptops fit everything on one screen (see the media query at the end). */
+  .bento{
+    position:relative; z-index:1;
+    max-width:1080px; margin:0 auto;
+    padding:40px 28px 80px;
+    display:flex; flex-direction:column; gap:20px;
   }
-
-  .intro{
-    margin-bottom:48px;
-    max-width:56ch;
+  .box{
+    border-radius:24px; padding:30px;
+    background:rgba(255,255,255,.035);
+    border:1px solid var(--line);
+    backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px);
   }
+  .eyebrow{
+    display:inline-flex; align-items:center; gap:8px;
+    font-family:'IBM Plex Mono',monospace; font-size:12px; font-weight:600;
+    letter-spacing:.08em; text-transform:uppercase;
+    padding:7px 14px; border-radius:999px;
+    background:rgba(255,255,255,.05); border:1px solid var(--line); color:var(--ink-soft);
+  }
+  .eyebrow .dot{ width:7px;height:7px;border-radius:50%; background:var(--green); box-shadow:0 0 10px var(--green); }
   .intro h1{
-    font-family:'Fraunces',Georgia,serif;
-    font-weight:500;
-    font-size:clamp(26px,3.6vw,34px);
-    line-height:1.25;
-    margin:0 0 12px;
-    text-wrap:balance;
-    color:var(--ink);
+    font-family:'Bricolage Grotesque','Manrope',sans-serif;
+    font-weight:800;
+    font-size:clamp(40px,7vw,80px);
+    line-height:.98;
+    letter-spacing:-.035em;
+    margin:0 0 18px;
+    max-width:14ch;
+  }
+  .intro h1 .hl{
+    background:linear-gradient(95deg,var(--pink),var(--orange) 45%,var(--green) 75%,var(--blue));
+    -webkit-background-clip:text; background-clip:text; color:transparent;
   }
   .intro p{
-    margin:0;
-    color:var(--ink-soft);
-    font-size:15px;
-    line-height:1.6;
+    margin:0; max-width:56ch;
+    color:var(--ink-soft); font-size:17px; line-height:1.6;
+  }
+  .chips{ display:flex; flex-wrap:wrap; gap:10px; margin-top:26px; }
+  .chips span{
+    font-size:13px; font-weight:700; padding:8px 14px; border-radius:999px;
+    background:rgba(255,255,255,.05); border:1px solid var(--line);
   }
 
   .grid{
     display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
-    gap:16px;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:20px;
   }
+  @media (max-width:760px){ .grid{ grid-template-columns:1fr; } }
 
   .card{
-    position:relative;
-    display:flex;
-    flex-direction:column;
-    gap:16px;
-    padding:24px;
-    background:var(--glass);
-    border:1px solid var(--glass-border);
-    border-radius:16px;
-    backdrop-filter:blur(28px) saturate(130%);
-    -webkit-backdrop-filter:blur(28px) saturate(130%);
-    box-shadow:
-      0 1px 0 rgba(255,255,255,0.07) inset,
-      0 14px 32px -16px rgba(0,0,0,.6);
-    text-decoration:none;
-    color:inherit;
-    transition:transform .2s cubic-bezier(.2,.7,.3,1), background .2s ease, border-color .2s ease;
+    --c:var(--violet);
+    position:relative; isolation:isolate;
+    display:flex; flex-direction:column; gap:22px;
+    min-height:300px;
+    padding:30px;
+    border-radius:24px;
+    background:
+      radial-gradient(420px circle at var(--mx,80%) var(--my,0%), color-mix(in srgb,var(--c) 22%,transparent), transparent 60%),
+      linear-gradient(160deg, color-mix(in srgb,var(--c) 12%,var(--panel)), var(--panel) 55%);
+    border:1px solid color-mix(in srgb,var(--c) 30%,transparent);
+    text-decoration:none; color:inherit;
     overflow:hidden;
-    cursor:pointer;
+    transition:transform .25s cubic-bezier(.2,.7,.3,1), box-shadow .25s ease, border-color .25s ease;
   }
-  a.card::after{
-    content:"";
-    position:absolute;
-    top:0;bottom:0;left:-60%;
-    width:40%;
-    background:linear-gradient(100deg, transparent, rgba(255,255,255,.10), transparent);
-    transform:skewX(-12deg);
-    transition:left .6s ease;
+  .card:hover{
+    transform:translateY(-5px);
+    border-color:color-mix(in srgb,var(--c) 70%,transparent);
+    box-shadow:0 24px 60px -24px color-mix(in srgb,var(--c) 70%,transparent);
   }
-  a.card:hover{
-    transform:translateY(-3px);
-    background:var(--glass-hover);
-    border-color:var(--glass-border-hover);
-  }
-  a.card:hover::after{ left:130%; }
-  @media (prefers-reduced-motion:reduce){
-    a.card, a.card::after{ transition:none; }
-  }
-  .card.is-soon{ opacity:.48; cursor:default; }
+  .card:focus-visible{ outline:3px solid var(--c); outline-offset:3px; }
+  .card.pink{ --c:var(--pink); }
+  .card.blue{ --c:var(--blue); }
+  .card.orange{ --c:var(--orange); }
+  .card.green{ --c:var(--green); }
 
-  .card-top{
-    display:flex;
-    align-items:flex-start;
-    justify-content:space-between;
-    gap:12px;
+  /* Big oversized initial sitting in the corner as decoration. */
+  .card .ghost{
+    position:absolute; right:-10px; bottom:-48px; z-index:-1;
+    font-family:'Bricolage Grotesque',sans-serif; font-weight:800;
+    font-size:220px; line-height:1; letter-spacing:-.06em;
+    color:var(--c); opacity:.07;
+    transition:opacity .25s ease, transform .4s cubic-bezier(.2,.7,.3,1);
   }
-  .glyph{
-    flex:none;
-    width:42px;height:42px;
-    border-radius:11px;
-    background:rgba(255,255,255,.06);
-    border:1px solid rgba(255,255,255,.1);
-    display:flex;align-items:center;justify-content:center;
-    font-family:'Fraunces',serif;
-    font-weight:600;
-    font-size:18px;
-    color:var(--ink);
+  .card:hover .ghost{ opacity:.14; transform:translate(-8px,-6px) rotate(-4deg); }
+
+  .card-top{ display:flex; align-items:flex-start; justify-content:space-between; gap:12px; }
+  .icon{
+    flex:none; width:64px;height:64px; border-radius:18px;
+    display:flex; align-items:center; justify-content:center;
+    background:var(--c); color:#0B0B10;
+    box-shadow:0 10px 30px -6px color-mix(in srgb,var(--c) 75%,transparent), inset 0 1px 0 rgba(255,255,255,.35);
+    transition:transform .3s cubic-bezier(.3,1.6,.5,1);
   }
-  .status{
-    flex:none;
-    font-family:'IBM Plex Mono',monospace;
-    font-size:10px;
-    font-weight:500;
-    letter-spacing:.07em;
-    text-transform:uppercase;
-    padding:5px 10px;
-    border-radius:999px;
+  .card:hover .icon{ transform:rotate(-8deg) scale(1.06); }
+  .icon svg{ width:30px;height:30px; }
+  .tag{
+    font-family:'IBM Plex Mono',monospace; font-size:11px; font-weight:600;
+    letter-spacing:.08em; text-transform:uppercase;
+    padding:6px 11px; border-radius:999px;
+    color:var(--c); background:color-mix(in srgb,var(--c) 14%,transparent);
+    border:1px solid color-mix(in srgb,var(--c) 35%,transparent);
     white-space:nowrap;
   }
-  .status-live{ background:rgba(255,255,255,.12); color:var(--ink); font-weight:700; }
-  .status-soon{ background:rgba(255,255,255,.05); color:var(--ink-faint); }
-
   .card h2{
-    font-size:17px;
-    font-weight:700;
-    margin:0 0 6px;
-    letter-spacing:-.005em;
-    color:var(--ink);
+    font-family:'Bricolage Grotesque','Manrope',sans-serif;
+    font-size:30px; font-weight:800; letter-spacing:-.025em; line-height:1.05;
+    margin:0 0 10px;
   }
-  .card p{
-    margin:0;
-    color:var(--ink-soft);
-    font-size:14px;
-    line-height:1.55;
-  }
-
+  .card p{ margin:0; color:var(--ink-soft); font-size:15px; line-height:1.6; max-width:42ch; }
   .card-foot{
-    margin-top:auto;
-    display:flex;
-    align-items:center;
-    gap:6px;
-    font-size:13px;
-    font-weight:700;
-    color:var(--ink);
+    margin-top:auto; display:flex; align-items:center; justify-content:space-between; gap:12px;
   }
-  .card-foot .arrow{
-    transition:transform .2s ease;
+  .key{ font-size:12.5px; font-weight:600; color:var(--ink-faint); }
+  .open{
+    display:inline-flex; align-items:center; gap:8px;
+    font-size:14px; font-weight:800; padding:10px 18px; border-radius:999px;
+    background:color-mix(in srgb,var(--c) 16%,transparent); color:var(--c);
+    transition:background .2s ease, color .2s ease;
   }
-  a.card:hover .card-foot .arrow{ transform:translateX(3px); }
+  .card:hover .open{ background:var(--c); color:#0B0B10; }
+  .open .arrow{ transition:transform .2s ease; }
+  .card:hover .open .arrow{ transform:translateX(4px); }
+
+  /* Fade-up on load, staggered. */
+  .rise{ opacity:0; transform:translateY(18px); animation:rise .7s cubic-bezier(.2,.7,.3,1) forwards; }
+  @keyframes rise{ to{ opacity:1; transform:none; } }
+  .grid .rise:nth-child(1){ animation-delay:.10s; }
+  .grid .rise:nth-child(2){ animation-delay:.18s; }
+  .grid .rise:nth-child(3){ animation-delay:.26s; }
+  .grid .rise:nth-child(4){ animation-delay:.34s; }
+
+  @media (prefers-reduced-motion:reduce){
+    .aurora span, .rise{ animation:none; opacity:1; transform:none; }
+    .card, .card .ghost, .icon, .open .arrow{ transition:none; }
+  }
 
   /* About + FAQ: plain answers for people and for search/answer engines. */
-  .about{
-    margin-top:72px;
-    display:grid;
-    grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);
-    gap:48px;
-    align-items:start;
-  }
   .about h2{
-    font-family:'Fraunces',Georgia,serif;
-    font-weight:500;
-    font-size:24px;
-    line-height:1.3;
+    font-family:'Bricolage Grotesque','Manrope',sans-serif;
+    font-weight:800; font-size:26px; letter-spacing:-.03em; line-height:1.05;
     margin:0 0 12px;
-    color:var(--ink);
   }
-  .about p{
-    margin:0 0 12px;
-    color:var(--ink-soft);
-    font-size:14.5px;
-    line-height:1.65;
+  .about .faq-title{ font-size:20px; margin:22px 0 12px; }
+  .about{ scrollbar-width:thin; scrollbar-color:rgba(255,255,255,.2) transparent; }
+  .about p{ margin:0 0 12px; color:var(--ink-soft); font-size:15px; line-height:1.65; }
+  .about a, .faq a, footer a{ color:var(--ink); text-underline-offset:3px; text-decoration-color:var(--pink); }
+  .faq{ display:flex; flex-direction:column; gap:10px; }
+  .faq details{
+    border-radius:16px; background:rgba(255,255,255,.035); border:1px solid var(--line);
+    transition:border-color .2s ease, background .2s ease;
   }
-  .about a, .faq a, footer a{ color:var(--ink); text-underline-offset:3px; }
-  .faq{ border-top:1px solid var(--glass-border); }
-  .faq details{ border-bottom:1px solid var(--glass-border); }
+  .faq details[open]{ background:rgba(255,255,255,.06); border-color:rgba(255,255,255,.18); }
   .faq summary{
-    display:flex;
-    justify-content:space-between;
-    gap:16px;
-    padding:16px 0;
-    font-size:14.5px;
-    font-weight:700;
-    color:var(--ink);
-    cursor:pointer;
-    list-style:none;
+    display:flex; justify-content:space-between; align-items:center; gap:16px;
+    padding:16px 20px;
+    font-size:15px; font-weight:700;
+    cursor:pointer; list-style:none;
   }
   .faq summary::-webkit-details-marker{ display:none; }
-  .faq summary::after{ content:"+"; color:var(--ink-faint); transition:transform .2s ease; }
-  .faq details[open] summary::after{ transform:rotate(45deg); }
-  .faq details p{ margin:0; padding:0 28px 18px 0; font-size:14px; }
-  .faq .key-list{ margin:-6px 0 0; padding:0 28px 18px 18px; color:var(--ink-soft); font-size:14px; line-height:1.6; }
+  .faq summary::after{
+    content:"+"; flex:none;
+    width:26px;height:26px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    font-size:18px; font-weight:600; color:#0B0B10; background:var(--ink-soft);
+    transition:transform .2s ease, background .2s ease;
+  }
+  .faq details[open] summary::after{ transform:rotate(45deg); background:var(--pink); }
+  .faq details p{ margin:0; padding:0 20px 18px; font-size:14.5px; }
+  .faq .key-list{ margin:-6px 0 0; padding:0 20px 18px 38px; color:var(--ink-soft); font-size:14.5px; line-height:1.6; }
   .faq .key-list li{ margin-bottom:6px; }
   .faq .key-list strong{ color:var(--ink); }
-  @media (max-width:720px){
-    .about{ grid-template-columns:1fr; gap:28px; }
+  @media (max-width:760px){
+    header{ padding:12px 16px; }
+    .head-right{ display:none; }
+    .bento{ padding:24px 16px 64px; gap:16px; }
+    .box{ padding:22px; }
+    .card{ padding:24px; min-height:0; }
   }
 
   footer{
-    margin-top:64px;
-    padding-top:24px;
-    border-top:1px solid var(--glass-border);
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    color:var(--ink-faint);
-    font-size:13px;
+    margin-top:24px; padding-top:18px;
+    border-top:1px solid var(--line);
+    display:flex; flex-wrap:wrap; gap:12px;
+    justify-content:space-between; align-items:center;
+    color:var(--ink-faint); font-size:13px;
   }
-  footer .mono{
-    font-family:'IBM Plex Mono',monospace;
-    font-size:11px;
-    letter-spacing:.04em;
+  footer .mono{ font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:.04em; }
+
+  @supports not (background:color-mix(in srgb,red 50%,blue)){
+    .card{ background:var(--panel); border-color:var(--line); }
   }
 
-  @supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
-    .card, header{ background:#14161D; }
+  /* Laptop and up: one screen, no page scroll. Headline top-left, About + FAQ
+     below it (scrolls inside its own box), the four tools as a 2x2 grid on the right. */
+  @media (min-width:1024px) and (min-height:620px){
+    /* body is a column: header on top, the bento takes whatever height is left */
+    body{ height:100vh; height:100svh; display:flex; flex-direction:column; }
+    header{ position:relative; flex:none; padding-top:10px; padding-bottom:10px; }
+    .bento{
+      flex:1; min-height:0; width:100%;
+      max-width:1480px;
+      padding:14px 24px 20px; gap:16px;
+      display:grid;
+      grid-template-columns:minmax(360px,.95fr) minmax(0,2fr);
+      grid-template-rows:auto minmax(0,1fr);
+      grid-template-areas:"intro tiles" "about tiles";
+    }
+    .intro{ grid-area:intro; padding:4px 4px 6px; }
+    .intro h1{ font-size:clamp(34px,3.2vw,54px); margin:0 0 12px; }
+    .intro p{ font-size:14.5px; line-height:1.55; }
+    .chips{ margin-top:16px; gap:8px; }
+    .chips span{ padding:6px 12px; font-size:12.5px; }
+    .about{ grid-area:about; min-height:0; overflow-y:auto; padding:24px 26px; }
+    .about p{ font-size:14px; }
+    .grid{ grid-area:tiles; min-height:0; grid-template-rows:repeat(2,minmax(0,1fr)); gap:16px; }
+    .card{ min-height:0; padding:26px 28px; gap:14px; }
+    .card h2{ font-size:clamp(22px,1.9vw,30px); margin-bottom:8px; }
+    .card p{ font-size:14.5px; }
+    .icon{ width:56px; height:56px; border-radius:16px; }
+    .icon svg{ width:26px; height:26px; }
+    .card .ghost{ font-size:clamp(140px,13vw,220px); }
+  }
+  @media (min-width:761px) and (max-width:1023px){
+    .grid{ grid-template-columns:repeat(2,minmax(0,1fr)); }
   }
 </style>
 </head>
 <body>
 
-<div class="light"></div>
-<div class="light-2"></div>
+<div class="aurora" aria-hidden="true"><span class="a1"></span><span class="a2"></span><span class="a3"></span><span class="a4"></span></div>
+<div class="grain" aria-hidden="true"></div>
 
 <header>
-  <div class="mark">
-    <svg viewBox="0 0 24 24" fill="none" stroke="#F4F5F8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-      <rect x="3" y="3" width="7" height="7" rx="1.5"></rect>
-      <rect x="14" y="3" width="7" height="7" rx="1.5"></rect>
-      <rect x="3" y="14" width="7" height="7" rx="1.5"></rect>
-      <rect x="14" y="14" width="7" height="7" rx="1.5"></rect>
-    </svg>
-  </div>
+  <div class="mark" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
   <span class="name">Customizable Business Tools</span>
+  <div class="head-right">
+    <nav><a href="#tools">Tools</a><a href="#about">About</a><a href="#faq">FAQ</a></nav>
+    <span class="eyebrow"><span class="dot"></span>4 free tools &middot; live now</span>
+  </div>
 </header>
 
-<div class="shell">
+<main class="bento">
   <div class="intro">
-    <h1>Small, sharp tools for running the business.</h1>
-    <p>Customer feedback surveys, financial statement dashboards, focus music and AI cost planning — each tool does one job well. No bundled platform to learn, no unrelated features in the way. Pick a tool below.</p>
+    <h1>Small, sharp tools for <span class="hl">running the business.</span></h1>
+    <p>Customer feedback surveys, financial statement dashboards, focus music and AI cost planning — each tool does one job well. No bundled platform to learn, no unrelated features in the way. Pick a tool.</p>
+    <div class="chips"><span>Free to use</span><span>Runs in your browser</span><span>No sign-up</span></div>
   </div>
 
-  <div class="grid">
-    <a class="card" href="https://app.custombiztools.online" target="_blank" rel="noopener">
+  <div class="grid" id="tools">
+    <a class="card pink rise" href="https://app.custombiztools.online" target="_blank" rel="noopener">
+      <span class="ghost" aria-hidden="true">C</span>
       <div class="card-top">
-        <div class="glyph">C</div>
-        <span class="status status-live">Live</span>
+        <div class="icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/><path d="M8.5 11h.01M12 11h.01M15.5 11h.01"/></svg>
+        </div>
+        <span class="tag">Feedback</span>
       </div>
       <div>
         <h2>Custom Inquiries</h2>
         <p>Feedback surveys with plain-English sentiment analysis and recommendations — bring your own AI key.</p>
       </div>
-      <div class="card-foot"><span>Open</span><span class="arrow">&#8594;</span></div>
+      <div class="card-foot"><span class="key">Uses your AI key</span><span class="open">Open <span class="arrow">&#8594;</span></span></div>
     </a>
 
-    <a class="card" href="https://eli.custombiztools.online" target="_blank" rel="noopener">
+    <a class="card blue rise" href="https://eli.custombiztools.online" target="_blank" rel="noopener">
+      <span class="ghost" aria-hidden="true">E</span>
       <div class="card-top">
-        <div class="glyph">E</div>
-        <span class="status status-live">Live</span>
+        <div class="icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>
+        </div>
+        <span class="tag">Finance</span>
       </div>
       <div>
         <h2>Eli</h2>
         <p>Upload a P&amp;L, balance sheet, or cash flow statement and get an interactive dashboard back &mdash; charts, trends, and a revenue-to-net-income bridge.</p>
       </div>
-      <div class="card-foot"><span>Open</span><span class="arrow">&#8594;</span></div>
+      <div class="card-foot"><span class="key">No key needed</span><span class="open">Open <span class="arrow">&#8594;</span></span></div>
     </a>
 
-    <a class="card" href="https://radio.custombiztools.online" target="_blank" rel="noopener">
+    <a class="card orange rise" href="https://radio.custombiztools.online" target="_blank" rel="noopener">
+      <span class="ghost" aria-hidden="true">F</span>
       <div class="card-top">
-        <div class="glyph">F</div>
-        <span class="status status-live">Live</span>
+        <div class="icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M21 19a2 2 0 0 1-2 2h-1v-6h3zM3 19a2 2 0 0 0 2 2h1v-6H3z"/></svg>
+        </div>
+        <span class="tag">Focus</span>
       </div>
       <div>
         <h2>Custombiztool Focus Radio</h2>
         <p>Original focus music with a Pomodoro timer &mdash; rain and fireplace sounds, and music that lowers itself on your breaks.</p>
       </div>
-      <div class="card-foot"><span>Open</span><span class="arrow">&#8594;</span></div>
+      <div class="card-foot"><span class="key">No key needed</span><span class="open">Open <span class="arrow">&#8594;</span></span></div>
     </a>
 
-    <a class="card" href="https://jarod.custombiztools.online" target="_blank" rel="noopener">
+    <a class="card green rise" href="https://jarod.custombiztools.online" target="_blank" rel="noopener">
+      <span class="ghost" aria-hidden="true">J</span>
       <div class="card-top">
-        <div class="glyph">J</div>
-        <span class="status status-live">Live</span>
+        <div class="icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="9" r="6"/><path d="M15.4 9.6A6 6 0 1 1 9.6 15.4"/><path d="M9 6.5v5M7.3 8h3"/></svg>
+        </div>
+        <span class="tag">AI costs</span>
       </div>
       <div>
         <h2>Jarod</h2>
         <p>Compare AI model prices, find cheaper models for each task, and size token budgets by role &mdash; pick your providers and it all runs in your browser.</p>
       </div>
-      <div class="card-foot"><span>Open</span><span class="arrow">&#8594;</span></div>
+      <div class="card-foot"><span class="key">Key optional</span><span class="open">Open <span class="arrow">&#8594;</span></span></div>
     </a>
   </div>
 
   <!-- Same Q&A as the FAQPage JSON-LD in the head. -->
-  <section class="about" id="about" aria-labelledby="about-title">
+  <section class="box about" id="about" aria-labelledby="about-title">
     <div>
       <h2 id="about-title">About Custom Biz Tools</h2>
       <p>Custom Biz Tools is a small set of web tools for people running a small business. Instead of one big platform, each tool handles one job: collecting and reading customer feedback, turning financial statements into charts, staying focused through the workday, and keeping AI costs in check.</p>
       <p>The tools are built by <a href="https://anthonyjctsg.com/">Anthony C Johnson</a>, a data specialist in Sugar Land, Texas, and the founder of <a href="https://ctsg-htx.com/">CTSG</a>, which helps Houston home-service companies get more repeat business from their customer data.</p>
     </div>
+    <h2 class="faq-title">FAQ</h2>
     <div class="faq" id="faq">
       <details open><summary>What is Custom Biz Tools?</summary><p>A set of small, single-purpose web tools for small businesses: Custom Inquiries for customer feedback surveys, Eli for financial statement dashboards, Focus Radio for focus music with a Pomodoro timer, and Jarod for comparing AI model costs. Each tool does one job, with no bundled platform to learn.</p></details>
       <details><summary>Who makes Custom Biz Tools?</summary><p><a href="https://anthonyjctsg.com/">Anthony C Johnson</a>, a data specialist in Sugar Land, Texas, and the founder of <a href="https://ctsg-htx.com/">CTSG</a> (Calamity Technology Solutions Group), which does customer data and follow-up campaigns for Houston home-service companies.</p></details>
@@ -519,13 +560,23 @@
       <details><summary>Is there free focus music with a Pomodoro timer?</summary><p>Yes. <a href="https://radio.custombiztools.online">Focus Radio</a> plays original focus music with a Pomodoro timer and optional rain and fireplace sounds, and lowers the music during breaks.</p></details>
       <details><summary>How can I compare AI model prices and token costs?</summary><p><a href="https://jarod.custombiztools.online">Jarod</a> compares AI model prices, suggests cheaper models for each task and sizes token budgets by role. It works with Anthropic and OpenAI keys and runs entirely in your browser.</p></details>
     </div>
+    <footer>
+      <span>custombiztools.online &middot; by <a href="https://anthonyjctsg.com/">Anthony C Johnson</a> &middot; <a href="https://ctsg-htx.com/">CTSG</a></span>
+      <span class="mono">est. 2026</span>
+    </footer>
   </section>
+</main>
 
-  <footer>
-    <span>custombiztools.online &middot; by <a href="https://anthonyjctsg.com/">Anthony C Johnson</a> &middot; <a href="https://ctsg-htx.com/">CTSG</a></span>
-    <span class="mono">est. 2026</span>
-  </footer>
-</div>
+<script>
+  // Card glow follows the pointer.
+  document.querySelectorAll('.card').forEach(function(card){
+    card.addEventListener('pointermove', function(e){
+      var r = card.getBoundingClientRect();
+      card.style.setProperty('--mx', (e.clientX - r.left) + 'px');
+      card.style.setProperty('--my', (e.clientY - r.top) + 'px');
+    });
+  });
+</script>
 
 </body>
 </html>
