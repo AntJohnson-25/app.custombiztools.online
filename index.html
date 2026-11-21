@@ -65,7 +65,7 @@
         {
           "@type": "Question",
           "name": "What is Custom Biz Tools?",
-          "acceptedAnswer": { "@type": "Answer", "text": "Custom Biz Tools (custombiztools.online) is a set of small, single-purpose web tools for small businesses: Custom Inquiries for customer feedback surveys, Eli for financial statement dashboards, Focus Radio for focus music with a Pomodoro timer, and Jarod for comparing AI model costs. Each tool does one job, with no bundled platform to learn." }
+          "acceptedAnswer": { "@type": "Answer", "text": "Custom Biz Tools (custombiztools.online) is a set of small, single-purpose web tools for small businesses: Custom Inquiries for customer feedback surveys, Eli for financial statement dashboards, Focus Radio for focus music with a Pomodoro timer, Jarod for comparing AI model costs, OpsFlow for mapping workflows, and PortaRag for searching your own documents. Each tool does one job, with no bundled platform to learn." }
         },
         {
           "@type": "Question",
@@ -75,7 +75,7 @@
         {
           "@type": "Question",
           "name": "Are the tools free?",
-          "acceptedAnswer": { "@type": "Answer", "text": "Yes, every tool is free to use. Some features run on AI and use your own API key, so that AI usage is billed to you by the provider directly. Custom Inquiries needs an OpenAI or Anthropic key for its sentiment analysis and recommendations. Eli works without a key, and an optional Anthropic or OpenAI key adds AI extraction for messy documents and an AI-written report. Jarod works without a key, and an optional Anthropic or OpenAI key adds live price refresh and AI review. Focus Radio needs no key." }
+          "acceptedAnswer": { "@type": "Answer", "text": "Yes, every tool is free to use. Some features run on AI and use your own API key, so that AI usage is billed to you by the provider directly. Custom Inquiries needs an OpenAI or Anthropic key for its sentiment analysis and recommendations. Eli works without a key, and an optional Anthropic or OpenAI key adds AI extraction for messy documents and an AI-written report. Jarod works without a key, and an optional Anthropic or OpenAI key adds live price refresh and AI review. Focus Radio, OpsFlow and PortaRag need no key." }
         },
         {
           "@type": "Question",
@@ -96,6 +96,11 @@
           "@type": "Question",
           "name": "How can I compare AI model prices and token costs?",
           "acceptedAnswer": { "@type": "Answer", "text": "Jarod at jarod.custombiztools.online compares AI model prices, suggests cheaper models for each task and sizes token budgets by role. It works with Anthropic and OpenAI keys and runs entirely in your browser." }
+        },
+        {
+          "@type": "Question",
+          "name": "How can I search my PDFs and Word documents privately?",
+          "acceptedAnswer": { "@type": "Answer", "text": "PortaRag at portarag.custombiztools.online lets you drop in PDFs, Word documents and notes, ask a question in plain words, and get the exact passage with its file and page. It runs entirely in your browser, so your documents are never uploaded." }
         }
       ]
     },
@@ -106,7 +111,7 @@
   "url": "https://custombiztools.online/",
   "inLanguage": "en-US",
   "publisher": { "@id": "https://custombiztools.online/#organization" },
-  "description": "Free, focused small-business tools: customer feedback surveys with AI sentiment analysis, a financial statement dashboard, focus music with a Pomodoro timer, and an AI model cost calculator.",
+  "description": "Free, focused small-business tools: customer feedback surveys with AI sentiment analysis, a financial statement dashboard, focus music with a Pomodoro timer, an AI model cost calculator, a workflow designer and private document search.",
   "hasPart": [
     {
       "@type": "SoftwareApplication",
@@ -147,6 +152,14 @@
       "operatingSystem": "Web",
       "url": "https://opsflow.custombiztools.online",
       "description": "Free workflow designer. Drag steps onto a canvas, sort them into swimlanes by owner, label decisions, record the tool and time for each step, and share it with a link."
+    },
+    {
+      "@type": "SoftwareApplication",
+      "name": "PortaRag",
+      "applicationCategory": "BusinessApplication",
+      "operatingSystem": "Web",
+      "url": "https://portarag.custombiztools.online",
+      "description": "Private document search. Drop in PDFs, Word documents and notes, ask a question in plain words, and get the exact passage with its file and page. Runs entirely in your browser; nothing is uploaded."
     }
   ]
     }
@@ -172,6 +185,7 @@
     --orange:#FF9A3D;
     --green:#2EE59D;
     --violet:#9B6BFF;
+    --cyan:#36D6E7;
   }
   *{box-sizing:border-box;}
   html,body{margin:0;padding:0;}
@@ -309,6 +323,7 @@
   .card.blue{ --c:var(--blue); }
   .card.orange{ --c:var(--orange); }
   .card.green{ --c:var(--green); }
+  .card.cyan{ --c:var(--cyan); }
 
   /* Big oversized initial sitting in the corner as decoration. */
   .card .ghost{
@@ -365,6 +380,8 @@
   .grid .rise:nth-child(2){ animation-delay:.18s; }
   .grid .rise:nth-child(3){ animation-delay:.26s; }
   .grid .rise:nth-child(4){ animation-delay:.34s; }
+  .grid .rise:nth-child(5){ animation-delay:.42s; }
+  .grid .rise:nth-child(6){ animation-delay:.50s; }
 
   @media (prefers-reduced-motion:reduce){
     .aurora span, .rise{ animation:none; opacity:1; transform:none; }
@@ -429,7 +446,7 @@
   }
 
   /* Laptop and up: one screen, no page scroll. Headline top-left, About + FAQ
-     below it (scrolls inside its own box), the four tools as a 2x2 grid on the right. */
+     below it (scrolls inside its own box), the six tools as a 2x3 grid on the right. */
   @media (min-width:1024px) and (min-height:700px){
     /* body is a column: header on top, the bento takes whatever height is left */
     body{ height:100vh; height:100svh; display:flex; flex-direction:column; }
@@ -450,7 +467,10 @@
     .chips span{ padding:6px 12px; font-size:12.5px; }
     .about{ grid-area:about; min-height:0; overflow-y:auto; padding:24px 26px; }
     .about p{ font-size:14px; }
-    .grid{ grid-area:tiles; min-height:0; grid-template-rows:repeat(2,minmax(0,1fr)); gap:16px; }
+    /* Rows share the height evenly when they fit; on a short laptop screen each card keeps its full size and the
+       tiles scroll inside their own column, like About does. The padding leaves room for the hover lift. */
+    .grid{ grid-area:tiles; min-height:0; grid-template-rows:none; grid-auto-rows:minmax(min-content,1fr); gap:16px;
+      overflow-y:auto; padding:6px 6px 6px 0; margin:-6px 0; scrollbar-width:thin; scrollbar-color:rgba(255,255,255,.2) transparent; }
     .card{ min-height:0; padding:26px 28px; gap:14px; }
     .card h2{ font-size:clamp(22px,1.9vw,30px); margin-bottom:8px; }
     .card p{ font-size:14.5px; }
@@ -473,12 +493,12 @@
   <span class="name">Customizable Business Tools</span>
   <nav><a href="#tools">Tools</a><a href="#about">About</a><a href="#faq">FAQ</a></nav>
 </header>
-<span class="eyebrow live"><span class="dot"></span>5 free tools &middot; live now</span>
+<span class="eyebrow live"><span class="dot"></span>6 free tools &middot; live now</span>
 
 <main class="bento">
   <div class="intro">
     <h1>Small, sharp tools for <span class="hl">running the business.</span></h1>
-    <p>Customer feedback surveys, financial statement dashboards, focus music, AI cost planning and workflow mapping — each tool does one job well. No bundled platform to learn, no unrelated features in the way. Pick a tool.</p>
+    <p>Customer feedback surveys, financial statement dashboards, focus music, AI cost planning, workflow mapping and private document search — each tool does one job well. No bundled platform to learn, no unrelated features in the way. Pick a tool.</p>
     <div class="chips"><span>Free to use</span><span>Runs in your browser</span><span>No sign-up</span></div>
   </div>
 
@@ -543,7 +563,7 @@
       <div class="card-foot"><span class="key">Key optional</span><span class="open">Open <span class="arrow">&#8594;</span></span></div>
     </a>
 
-    <a class="card rise" style="grid-column:1/-1;min-height:240px" href="https://opsflow.custombiztools.online" target="_blank" rel="noopener">
+    <a class="card rise" href="https://opsflow.custombiztools.online" target="_blank" rel="noopener">
       <span class="ghost" aria-hidden="true">O</span>
       <div class="card-top">
         <div class="icon" aria-hidden="true">
@@ -557,30 +577,46 @@
       </div>
       <div class="card-foot"><span class="key">No key needed</span><span class="open">Open <span class="arrow">&#8594;</span></span></div>
     </a>
+
+    <a class="card cyan rise" href="https://portarag.custombiztools.online" target="_blank" rel="noopener">
+      <span class="ghost" aria-hidden="true">P</span>
+      <div class="card-top">
+        <div class="icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h4"/><path d="M14 3v5h5"/><path d="M14 3l5 5v2"/><path d="M8 9h2M8 13h3"/><circle cx="16" cy="16" r="3"/><path d="M18.2 18.2 21 21"/></svg>
+        </div>
+        <span class="tag">Documents</span>
+      </div>
+      <div>
+        <h2>PortaRag</h2>
+        <p>Drop in PDFs and Word docs, ask a question in plain words, and get the exact passage with its file and page. Runs in your browser &mdash; your documents never leave your computer.</p>
+      </div>
+      <div class="card-foot"><span class="key">No key needed</span><span class="open">Open <span class="arrow">&#8594;</span></span></div>
+    </a>
   </div>
 
   <!-- Same Q&A as the FAQPage JSON-LD in the head. -->
   <section class="box about" id="about" aria-labelledby="about-title">
     <div>
       <h2 id="about-title">About Custom Biz Tools</h2>
-      <p>Custom Biz Tools is a small set of web tools for people running a small business. Instead of one big platform, each tool handles one job: collecting and reading customer feedback, turning financial statements into charts, staying focused through the workday, and keeping AI costs in check.</p>
+      <p>Custom Biz Tools is a small set of web tools for people running a small business. Instead of one big platform, each tool handles one job: collecting and reading customer feedback, turning financial statements into charts, staying focused through the workday, keeping AI costs in check, mapping workflows, and finding answers in your own documents.</p>
       <p>The tools are built by <a href="https://anthonyjctsg.com/">Anthony C Johnson</a>, a data specialist in Sugar Land, Texas, and the founder of <a href="https://ctsg-htx.com/">CTSG</a>, which helps Houston home-service companies get more repeat business from their customer data.</p>
     </div>
     <h2 class="faq-title">FAQ</h2>
     <div class="faq" id="faq">
-      <details open><summary>What is Custom Biz Tools?</summary><p>A set of small, single-purpose web tools for small businesses: Custom Inquiries for customer feedback surveys, Eli for financial statement dashboards, Focus Radio for focus music with a Pomodoro timer, Jarod for comparing AI model costs, and OpsFlow for mapping workflows. Each tool does one job, with no bundled platform to learn.</p></details>
+      <details open><summary>What is Custom Biz Tools?</summary><p>A set of small, single-purpose web tools for small businesses: Custom Inquiries for customer feedback surveys, Eli for financial statement dashboards, Focus Radio for focus music with a Pomodoro timer, Jarod for comparing AI model costs, OpsFlow for mapping workflows, and PortaRag for searching your own documents. Each tool does one job, with no bundled platform to learn.</p></details>
       <details><summary>Who makes Custom Biz Tools?</summary><p><a href="https://anthonyjctsg.com/">Anthony C Johnson</a>, a data specialist in Sugar Land, Texas, and the founder of <a href="https://ctsg-htx.com/">CTSG</a> (Calamity Technology Solutions Group), which does customer data and follow-up campaigns for Houston home-service companies.</p></details>
       <details><summary>Are the tools free?</summary><p>Yes, every tool is free to use. Some features run on AI and use your own API key, so that AI usage is billed to you by the provider directly:</p>
         <ul class="key-list">
           <li><strong>Custom Inquiries</strong> needs an OpenAI or Anthropic key for its sentiment analysis and recommendations.</li>
           <li><strong>Eli</strong> works without a key. An optional Anthropic or OpenAI key adds AI extraction for messy documents and an AI-written report.</li>
           <li><strong>Jarod</strong> works without a key. An optional Anthropic or OpenAI key adds live price refresh and AI review.</li>
-          <li><strong>Focus Radio</strong> needs no key.</li>
+          <li><strong>Focus Radio</strong>, <strong>OpsFlow</strong> and <strong>PortaRag</strong> need no key.</li>
         </ul></details>
       <details><summary>How can I turn a P&amp;L or balance sheet into charts?</summary><p>Upload a profit and loss statement, balance sheet or cash flow statement to <a href="https://eli.custombiztools.online">Eli</a>. It builds an interactive dashboard with charts, trends and a revenue-to-net-income bridge.</p></details>
       <details><summary>How do I analyze customer feedback survey responses?</summary><p><a href="https://app.custombiztools.online">Custom Inquiries</a> runs customer feedback surveys and turns the answers into plain-English sentiment analysis and recommendations, using your own AI key.</p></details>
       <details><summary>Is there free focus music with a Pomodoro timer?</summary><p>Yes. <a href="https://radio.custombiztools.online">Focus Radio</a> plays original focus music with a Pomodoro timer and optional rain and fireplace sounds, and lowers the music during breaks.</p></details>
       <details><summary>How can I compare AI model prices and token costs?</summary><p><a href="https://jarod.custombiztools.online">Jarod</a> compares AI model prices, suggests cheaper models for each task and sizes token budgets by role. It works with Anthropic and OpenAI keys and runs entirely in your browser.</p></details>
+      <details><summary>How can I search my PDFs and Word documents privately?</summary><p><a href="https://portarag.custombiztools.online">PortaRag</a> lets you drop in PDFs, Word documents and notes, ask a question in plain words, and get the exact passage with its file and page. It runs entirely in your browser, so your documents are never uploaded.</p></details>
     </div>
     <footer>
       <span>custombiztools.online &middot; by <a href="https://anthonyjctsg.com/">Anthony C Johnson</a> &middot; <a href="https://ctsg-htx.com/">CTSG</a></span>
